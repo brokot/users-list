@@ -20,4 +20,4 @@ ReactOnRails.register({
 });
 
 // Styles
-import '@shopify/polaris/dist/styles.css';
+import '../stylesheets/application.scss';
