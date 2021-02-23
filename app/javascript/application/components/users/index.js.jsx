@@ -11,8 +11,7 @@ import axios from 'axios';
 
 class UsersList extends Component {
   componentDidMount() {
-    const { paginationData } = this.props;
-    this.loadUsers({ page: paginationData.page});
+    this.loadUsers(this.paginationParams());
   }
 
   loadUsers(params) {
@@ -80,7 +79,16 @@ class UsersList extends Component {
 
   changePage(page) {
     this.props.actions.onSetPaginationData({ page });
-    this.loadUsers({ page });
+    this.loadUsers({...this.paginationParams(), page });
+  }
+
+  paginationParams() {
+    const { paginationData } = this.props;
+
+    return {
+      page: paginationData.page,
+      limit: paginationData.limit,
+    }
   }
 
   render() {

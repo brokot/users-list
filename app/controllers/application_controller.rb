@@ -8,4 +8,13 @@ class ApplicationController < ActionController::Base
         total_count: object.total_count
     }
   end
+
+  def pagination_data
+    {
+      page: params[:page],
+      limit: params[:limit]
+    }
+  end
+  helper_method :pagination_data
+
 end
