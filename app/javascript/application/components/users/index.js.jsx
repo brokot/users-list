@@ -6,11 +6,13 @@ import {
   Page,
 } from '@shopify/polaris';
 import IndexSpinner from '../common/index_spinner.js.jsx';
+import Paginator from '../common/paginator.js.jsx';
 import axios from 'axios';
 
 class UsersList extends Component {
   componentDidMount() {
-    this.loadUsers({});
+    const { paginationData } = this.props;
+    this.loadUsers({ page: paginationData.current_page});
   }
 
   loadUsers(params) {
@@ -22,6 +24,7 @@ class UsersList extends Component {
 
   onLoadUsers(data) {
     this.props.actions.onSetUsers(data.users);
+    this.props.actions.onSetPaginationData(data.meta);
     this.props.actions.onSetLoading(false);
   }
 
@@ -57,10 +60,27 @@ class UsersList extends Component {
     });
   }
 
+  buildFooter() {
+    const { paginationData } = this.props;
+
+    return (
+      <Paginator
+        totalPages={paginationData.total_pages}
+        page={paginationData.current_page}
+        changePage={this.changePage.bind(this)}
+      />
+    );
+  }
+
   userStatus(status) {
     return(
       <Badge status={status === 'inactive' ? 'critical' : 'success'}>{status}</Badge>
     );
+  }
+
+  changePage(current_page) {
+    this.props.actions.onSetPaginationData({ current_page });
+    this.loadUsers({ page: current_page });
   }
 
   render() {
@@ -80,6 +100,7 @@ class UsersList extends Component {
                 columnContentTypes={this.contentType()}
                 headings={this.headers()}
                 rows={this.rows()}
+                footerContent={this.buildFooter()}
               />
             </div>
           </Card.Section>

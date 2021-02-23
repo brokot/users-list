@@ -8,9 +8,14 @@ import {
   onSetUsers,
 } from '../actions/users.js';
 
+import {
+  onSetPaginationData,
+} from '../actions/app.js';
+
 function mapStateToProps(state) {
   return {
     loading: state.users.loading,
+    paginationData: state.app.paginationData,
     users: state.users.users,
   };
 }
@@ -20,6 +25,7 @@ function mapDispatchToProps(dispatch) {
     actions: bindActionCreators(
       {
         onSetLoading,
+        onSetPaginationData,
         onSetUsers,
       },
       dispatch,
