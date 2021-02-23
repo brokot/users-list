@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import UsersList from '../components/users/index.js.jsx';
 
 import {
+  onSetLoading,
   onSetUsers,
 } from '../actions/users.js';
 
 function mapStateToProps(state) {
   return {
+    loading: state.users.loading,
     users: state.users.users,
   };
 }
@@ -17,6 +19,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(
       {
+        onSetLoading,
         onSetUsers,
       },
       dispatch,

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import configureStore from '../store/configureStore';
 import { Provider } from 'react-redux';
 import UsersApp from './users_app.js';
+import PolarisWrapper from '../../application/components/common/polaris_wrapper.js.jsx';
 
 class UsersContainer extends Component {
   constructor(props) {
@@ -13,7 +14,9 @@ class UsersContainer extends Component {
     return (
       <div>
         <Provider store={this.store}>
-          <UsersApp />
+          <PolarisWrapper>
+            <UsersApp />
+          </PolarisWrapper>
         </Provider>
       </div>
   );
