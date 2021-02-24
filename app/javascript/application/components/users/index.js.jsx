@@ -5,41 +5,22 @@ import {
   Badge,
   Card,
   DataTable,
-  Modal,
   Page,
-  TextContainer,
 } from '@shopify/polaris';
+import DeletingUserModal from './delete_user_modal.js.jsx';
 import IndexSpinner from '../common/index_spinner.js.jsx';
 import Paginator from '../common/paginator.js.jsx';
 
 class UsersList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      userIdOnDelete: null,
-      deleting: false,
-    }
-  }
-
   componentDidMount() {
     this.loadUsers(this.paginationParams());
   }
 
-  handleDelete(id) {
-    this.setState({ userIdOnDelete: id });
-  }
-
-  onConfirmDeleting() {
-    this.setState({ deleting: true });
-    this.props.actions.onDeleteUser(this.state.userIdOnDelete, () => {
-      this.setState({ userIdOnDelete: null, deleting: false });
+  onDeleteUser(id, callback) {
+    this.props.actions.onDeleteUser(id, () => {
+      callback && callback();
       this.loadUsers(this.paginationParams());
     });
-  }
-
-  onCancelDeleting() {
-    this.setState({ userIdOnDelete: null });
   }
 
   loadUsers(params) {
@@ -92,7 +73,7 @@ class UsersList extends Component {
       <div style={{ minWidth: '150px' }}>
         <ButtonGroup>
           <Button size="slim" onClick={() => {}}>Edit</Button>
-          <Button size="slim" destructive onClick={() => { this.handleDelete(user.id) }}>Delete</Button>
+          <Button size="slim" destructive onClick={() => { this.setUserOnDelete(user.id) }}>Delete</Button>
         </ButtonGroup>
       </div>
     );
@@ -119,13 +100,7 @@ class UsersList extends Component {
   }
 
   render() {
-    const {
-      loading,
-    } = this.props;
-    const {
-      deleting,
-      userIdOnDelete,
-    } = this.state;
+    const { loading } = this.props;
 
     return (
       <Page
@@ -144,33 +119,10 @@ class UsersList extends Component {
             </div>
           </Card.Section>
         </Card>
-        <Modal
-          open={userIdOnDelete}
-          onClose={this.onCancelDeleting.bind(this)}
-          title="Delete user"
-          primaryAction={{
-            content: 'Confirm',
-            disabled: deleting,
-            loading: deleting,
-            onAction: this.onConfirmDeleting.bind(this),
-          }}
-          secondaryActions={[
-            {
-              content: 'Cancel',
-              disabled: deleting,
-              loading: deleting,
-              onAction: this.onCancelDeleting.bind(this),
-            },
-          ]}
-        >
-          <Modal.Section>
-            <TextContainer>
-              <p>
-                Are you sure you want to delete this user
-              </p>
-            </TextContainer>
-          </Modal.Section>
-        </Modal>
+        <DeletingUserModal
+          getOpenFn={(openFn) => { this.setUserOnDelete = openFn }}
+          onDelete={this.onDeleteUser.bind(this)}
+        />
       </Page>
     );
   }
