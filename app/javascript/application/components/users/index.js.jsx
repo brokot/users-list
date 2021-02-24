@@ -5,20 +5,41 @@ import {
   Badge,
   Card,
   DataTable,
+  Modal,
   Page,
+  TextContainer,
 } from '@shopify/polaris';
 import IndexSpinner from '../common/index_spinner.js.jsx';
 import Paginator from '../common/paginator.js.jsx';
 
 class UsersList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      userIdOnDelete: null,
+      deleting: false,
+    }
+  }
+
   componentDidMount() {
     this.loadUsers(this.paginationParams());
   }
 
   handleDelete(id) {
-    this.props.actions.onDeleteUser(id, () => {
+    this.setState({ userIdOnDelete: id });
+  }
+
+  onConfirmDeleting() {
+    this.setState({ deleting: true });
+    this.props.actions.onDeleteUser(this.state.userIdOnDelete, () => {
+      this.setState({ userIdOnDelete: null, deleting: false });
       this.loadUsers(this.paginationParams());
     });
+  }
+
+  onCancelDeleting() {
+    this.setState({ userIdOnDelete: null });
   }
 
   loadUsers(params) {
@@ -101,6 +122,10 @@ class UsersList extends Component {
     const {
       loading,
     } = this.props;
+    const {
+      deleting,
+      userIdOnDelete,
+    } = this.state;
 
     return (
       <Page
@@ -119,6 +144,33 @@ class UsersList extends Component {
             </div>
           </Card.Section>
         </Card>
+        <Modal
+          open={userIdOnDelete}
+          onClose={this.onCancelDeleting.bind(this)}
+          title="Delete user"
+          primaryAction={{
+            content: 'Confirm',
+            disabled: deleting,
+            loading: deleting,
+            onAction: this.onConfirmDeleting.bind(this),
+          }}
+          secondaryActions={[
+            {
+              content: 'Cancel',
+              disabled: deleting,
+              loading: deleting,
+              onAction: this.onCancelDeleting.bind(this),
+            },
+          ]}
+        >
+          <Modal.Section>
+            <TextContainer>
+              <p>
+                Are you sure you want to delete this user
+              </p>
+            </TextContainer>
+          </Modal.Section>
+        </Modal>
       </Page>
     );
   }
