@@ -7,7 +7,6 @@ import {
 } from '@shopify/polaris';
 import IndexSpinner from '../common/index_spinner.js.jsx';
 import Paginator from '../common/paginator.js.jsx';
-import axios from 'axios';
 
 class UsersList extends Component {
   componentDidMount() {
@@ -15,21 +14,9 @@ class UsersList extends Component {
   }
 
   loadUsers(params) {
-    this.props.actions.onSetLoading(true);
-    axios.get('/users', { params: params })
-      .then((response) => { this.onLoadUsers(response.data) })
-      .catch((error) => { this.onFail(error) });
-  }
-
-  onLoadUsers(data) {
-    this.props.actions.onSetUsers(data.users);
-    this.props.actions.onSetPaginationData(data.meta);
-    this.props.actions.onSetLoading(false);
-  }
-
-  onFail(error) {
-    console.log(error);
-    this.props.actions.onSetLoading(false);
+    this.props.actions.loadUsers(params, (data) => {
+      this.props.actions.onSetPaginationData(data.meta);
+    });
   }
 
   headers() {

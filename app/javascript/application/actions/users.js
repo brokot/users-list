@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const SET_LOADING = 'SET_LOADING';
 export const SET_USERS = 'SET_USERS';
 
@@ -14,3 +16,20 @@ export function onSetUsers(users) {
     users,
   };
 }
+
+export function loadUsers(params, success) {
+  return (dispatch) => {
+    dispatch(onSetLoading(true));
+    axios.get('/users', { params }).then((response) => {
+      const { data } = response;
+      dispatch(onSetUsers(data.users));
+      dispatch(onSetLoading(false));
+      success && success(data);
+    }).catch((error) => {
+      console.log(error);
+      dispatch(onSetLoading(false));
+    });
+  }
+}
+
+
