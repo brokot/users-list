@@ -15,6 +15,12 @@ class UsersList extends Component {
     this.loadUsers(this.paginationParams());
   }
 
+  handleDelete(id) {
+    this.props.actions.onDeleteUser(id, () => {
+      this.loadUsers(this.paginationParams());
+    });
+  }
+
   loadUsers(params) {
     this.props.actions.loadUsers(params, (data) => {
       this.props.actions.onSetPaginationData(data.meta);
@@ -65,7 +71,7 @@ class UsersList extends Component {
       <div style={{ minWidth: '150px' }}>
         <ButtonGroup>
           <Button size="slim" onClick={() => {}}>Edit</Button>
-          <Button size="slim" destructive onClick={() => {}}>Delete</Button>
+          <Button size="slim" destructive onClick={() => { this.handleDelete(user.id) }}>Delete</Button>
         </ButtonGroup>
       </div>
     );

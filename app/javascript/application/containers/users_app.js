@@ -5,6 +5,7 @@ import UsersList from '../components/users/index.js.jsx';
 
 import {
   loadUsers,
+  onDeleteUser,
 } from '../actions/users.js';
 
 import {
@@ -24,6 +25,7 @@ function mapDispatchToProps(dispatch) {
     actions: bindActionCreators(
       {
         loadUsers,
+        onDeleteUser,
         onSetPaginationData,
       },
       dispatch,

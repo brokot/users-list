@@ -19,5 +19,7 @@ ReactOnRails.register({
   UsersApp,
 });
 
+window.axiosDefaultHeaders = ReactOnRails.authenticityHeaders({'Content-Type': 'application/json' });
+
 // Styles
 import '../stylesheets/application.scss';

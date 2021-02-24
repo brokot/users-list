@@ -32,4 +32,15 @@ export function loadUsers(params, success) {
   }
 }
 
-
+export function onDeleteUser(id, success) {
+  return (dispatch) => {
+    axios.delete(
+      `/users/${id}`,
+      { headers: window.axiosDefaultHeaders }
+    ).then((response) => {
+      success && success(response);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+}
