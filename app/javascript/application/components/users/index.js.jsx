@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {
+  Button,
+  ButtonGroup,
   Badge,
   Card,
   DataTable,
@@ -41,7 +43,7 @@ class UsersList extends Component {
         user.phone,
         this.userStatus(user.status),
         user.updated_at,
-        ''
+        this.userActions(user),
       ];
     });
   }
@@ -55,6 +57,17 @@ class UsersList extends Component {
         page={paginationData.page}
         changePage={this.changePage.bind(this)}
       />
+    );
+  }
+
+  userActions(user) {
+    return (
+      <div style={{ minWidth: '150px' }}>
+        <ButtonGroup>
+          <Button size="slim" onClick={() => {}}>Edit</Button>
+          <Button size="slim" destructive onClick={() => {}}>Delete</Button>
+        </ButtonGroup>
+      </div>
     );
   }
 
