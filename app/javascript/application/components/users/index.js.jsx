@@ -10,6 +10,7 @@ import {
 import DeletingUserModal from './delete_user_modal.js.jsx';
 import IndexSpinner from '../common/index_spinner.js.jsx';
 import Paginator from '../common/paginator.js.jsx';
+import UserFormModal from './user_form_modal.js.jsx';
 
 class UsersList extends Component {
   componentDidMount() {
@@ -72,7 +73,7 @@ class UsersList extends Component {
     return (
       <div style={{ minWidth: '150px' }}>
         <ButtonGroup>
-          <Button size="slim" onClick={() => {}}>Edit</Button>
+          <Button size="slim" onClick={() => { this.props.actions.loadUser(user.id) }}>Edit</Button>
           <Button size="slim" destructive onClick={() => { this.setUserOnDelete(user.id) }}>Delete</Button>
         </ButtonGroup>
       </div>
@@ -100,11 +101,15 @@ class UsersList extends Component {
   }
 
   render() {
-    const { loading } = this.props;
+    const { actions, loading, saving, user } = this.props;
 
     return (
       <Page
         title="Users"
+        primaryAction={{
+          content: 'Create user',
+          onAction: () => { actions.onSetUser({}) }
+        }}
       >
         <Card>
           <Card.Section>
@@ -122,6 +127,13 @@ class UsersList extends Component {
         <DeletingUserModal
           getOpenFn={(openFn) => { this.setUserOnDelete = openFn }}
           onDelete={this.onDeleteUser.bind(this)}
+        />
+        <UserFormModal
+          user={user}
+          loading={saving}
+          onChange={actions.onSetUserAttribute}
+          onSave={actions.onSaveUser}
+          onCancel={() => { actions.onSetUser(null) }}
         />
       </Page>
     );
