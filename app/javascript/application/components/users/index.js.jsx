@@ -5,7 +5,9 @@ import {
   Badge,
   Card,
   DataTable,
+  Frame,
   Page,
+  Toast,
 } from '@shopify/polaris';
 import DeletingUserModal from './delete_user_modal.js.jsx';
 import IndexSpinner from '../common/index_spinner.js.jsx';
@@ -120,42 +122,48 @@ class UsersList extends Component {
   }
 
   render() {
-    const { actions, deleting, loading, saving, user } = this.props;
+    const { actions, deleting, loading, message, saving, user } = this.props;
 
     return (
-      <Page
-        title="Users"
-        primaryAction={{
-          content: 'Create user',
-          onAction: () => { actions.onSetUser({}) }
-        }}
-      >
-        <Card>
-          <Card.Section>
-            <div style={{position: 'relative', minHeight: '80px'}}>
-              {loading && <IndexSpinner />}
-              <DataTable
-                columnContentTypes={this.contentType()}
-                headings={this.headers()}
-                rows={this.rows()}
-                footerContent={this.buildFooter()}
-              />
-            </div>
-          </Card.Section>
-        </Card>
-        <DeletingUserModal
-          getOpenFn={(openFn) => { this.setUserOnDelete = openFn }}
-          loading={deleting}
-          onDelete={this.onDeleteUser.bind(this)}
-        />
-        <UserFormModal
-          user={user}
-          loading={saving}
-          onChange={actions.onSetUserAttribute}
-          onSave={this.onSaveUser.bind(this)}
-          onCancel={() => { actions.onSetUser(null) }}
-        />
-      </Page>
+      <Frame>
+        <Page
+          title="Users"
+          primaryAction={{
+            content: 'Create user',
+            onAction: () => { actions.onSetUser({}) }
+          }}
+        >
+          <Card>
+            <Card.Section>
+              <div style={{position: 'relative', minHeight: '80px'}}>
+                {loading && <IndexSpinner />}
+                <DataTable
+                  columnContentTypes={this.contentType()}
+                  headings={this.headers()}
+                  rows={this.rows()}
+                  footerContent={this.buildFooter()}
+                />
+              </div>
+            </Card.Section>
+          </Card>
+          <DeletingUserModal
+            getOpenFn={(openFn) => { this.setUserOnDelete = openFn }}
+            loading={deleting}
+            onDelete={this.onDeleteUser.bind(this)}
+          />
+          <UserFormModal
+            user={user}
+            loading={saving}
+            onChange={actions.onSetUserAttribute}
+            onSave={this.onSaveUser.bind(this)}
+            onCancel={() => { actions.onSetUser(null) }}
+          />
+          {message.content && <Toast
+            error={message.error}
+            content={message.content}
+            onDismiss={() => actions.onSetMessage()} />}
+        </Page>
+      </Frame>
     );
   }
 }

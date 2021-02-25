@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   onSetDeleting,
   onSetLoading,
+  onSetMessage,
   onSetSaving
 } from './app.js';
 
@@ -42,7 +43,7 @@ export function loadUser(id) {
     }).catch((error) => {
       dispatch(onSetUser(null));
       dispatch(onSetSaving(false));
-      console.log(error);
+      dispatch(onSetMessage("User can't be loaded", true));
     });
   }
 }
@@ -57,7 +58,7 @@ export function loadUsers(params, success) {
       success && success(data);
     }).catch((error) => {
       dispatch(onSetLoading(false));
-      console.log(error);
+      dispatch(onSetMessage("Users can't be loaded", true));
     });
   }
 }
@@ -73,7 +74,7 @@ export function onDeleteUser(id, success) {
       success && success(response);
     }).catch((error) => {
       dispatch(onSetDeleting(false));
-      console.log(error);
+      dispatch(onSetMessage("User can't be deleted", true));
     });
   }
 }
@@ -95,6 +96,7 @@ export function onSaveUser(user, success) {
     }).catch((error) => {
       dispatch(onSetSaving(false));
       if (error.response) dispatch(onSetUserAttribute('errors', error.response.data));
+      dispatch(onSetMessage("User can't be saved", true));
     });
   }
 }

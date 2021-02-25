@@ -1,5 +1,6 @@
 export const SET_DELETING = 'SET_DELETING';
 export const SET_LOADING = 'SET_LOADING';
+export const SET_MESSAGE = 'SET_MESSAGE';
 export const SET_PAGINATION_DATA = 'SET_PAGINATION_DATA';
 export const SET_SAVING = 'SET_SAVING';
 
@@ -10,11 +11,18 @@ export function onSetDeleting(deleting) {
   };
 }
 
-
 export function onSetLoading(loading) {
   return {
     type: SET_LOADING,
     loading,
+  };
+}
+
+export function onSetMessage(content, error) {
+  return {
+    type: SET_MESSAGE,
+    content,
+    error
   };
 }
 

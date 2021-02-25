@@ -13,6 +13,7 @@ import {
 } from '../actions/users.js';
 
 import {
+  onSetMessage,
   onSetPaginationData,
 } from '../actions/app.js';
 
@@ -20,6 +21,7 @@ function mapStateToProps(state) {
   return {
     deleting: state.app.deleting,
     loading: state.app.loading,
+    message: state.app.message,
     paginationData: state.app.paginationData,
     saving: state.app.saving,
     user: state.users.user,
@@ -35,6 +37,7 @@ function mapDispatchToProps(dispatch) {
         loadUsers,
         onDeleteUser,
         onSaveUser,
+        onSetMessage,
         onSetUser,
         onSetUserAttribute,
         onSetPaginationData,
