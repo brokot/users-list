@@ -81,7 +81,7 @@ export function onDeleteUser(id, success) {
 export function onSaveUser(user, success) {
   return (dispatch) => {
     const method = user.id ? 'PUT' : 'POST';
-    const url = user.id ? `/users/${id}` : '/users';
+    const url = user.id ? `/users/${user.id}` : '/users';
     dispatch(onSetSaving(true));
     axios({
       method: method,
