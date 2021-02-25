@@ -7,6 +7,12 @@ import {
 } from '@shopify/polaris';
 
 class UserFormModal extends Component {
+  error(field) {
+    const { user } = this.props;
+    if (!user || !user.errors) return null;
+    return user.errors[field];
+  }
+
   render() {
     const { loading, user, onCancel, onChange, onSave } = this.props;
     if (!user) return null;
@@ -35,22 +41,26 @@ class UserFormModal extends Component {
         <Modal.Section>
           <FormLayout>
             <TextField
+              error={this.error('name')}
               label="Name*"
               onChange={(value) => { onChange('name', value)}}
               value={user.name}
             />
             <TextField
+              error={this.error('email')}
               type="email"
               label="Email*"
               onChange={(value) => { onChange('email', value)}}
               value={user.email}
             />
             <TextField
+              error={this.error('title')}
               label="Title"
               onChange={(value) => { onChange('title', value)}}
               value={user.title}
             />
             <TextField
+              error={this.error('phone')}
               label="Phone*"
               onChange={(value) => { onChange('phone', value)}}
               value={user.phone}
