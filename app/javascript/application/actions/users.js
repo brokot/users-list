@@ -89,6 +89,7 @@ export function onSaveUser(user, success) {
       data: { user: user },
       headers: window.axiosDefaultHeaders
     }).then((response) => {
+      dispatch(onSetUser(null));
       dispatch(onSetSaving(false));
       success && success(response);
     }).catch((error) => {
