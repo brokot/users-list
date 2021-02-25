@@ -24,10 +24,29 @@ class UsersList extends Component {
     });
   }
 
+  onSaveUser() {
+    this.props.actions.onSaveUser(this.userParams(), () => {
+      this.loadUsers(this.paginationParams());
+    });
+  }
+
   loadUsers(params) {
     this.props.actions.loadUsers(params, (data) => {
       this.props.actions.onSetPaginationData(data.meta);
     });
+  }
+
+  userParams() {
+    const { user } = this.props;
+    return {...this.blankUser(), ...user, errors: null};
+  }
+
+  blankUser() {
+    return({
+      name: '',
+      email: '',
+      phone: '',
+    })
   }
 
   headers() {
@@ -133,7 +152,7 @@ class UsersList extends Component {
           user={user}
           loading={saving}
           onChange={actions.onSetUserAttribute}
-          onSave={actions.onSaveUser}
+          onSave={this.onSaveUser.bind(this)}
           onCancel={() => { actions.onSetUser(null) }}
         />
       </Page>

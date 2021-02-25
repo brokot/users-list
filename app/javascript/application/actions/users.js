@@ -77,3 +77,23 @@ export function onDeleteUser(id, success) {
     });
   }
 }
+
+export function onSaveUser(user, success) {
+  return (dispatch) => {
+    const method = user.id ? 'PUT' : 'POST';
+    const url = user.id ? `/users/${id}` : '/users';
+    dispatch(onSetSaving(true));
+    axios({
+      method: method,
+      url: url,
+      data: { user: user },
+      headers: window.axiosDefaultHeaders
+    }).then((response) => {
+      dispatch(onSetSaving(false));
+      success && success(response);
+    }).catch((error) => {
+      dispatch(onSetSaving(false));
+      if (error.response) dispatch(onSetUserAttribute('errors', error.response.data));
+    });
+  }
+}

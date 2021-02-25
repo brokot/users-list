@@ -9,6 +9,7 @@ import {
   onSetUser,
   onSetUserAttribute,
   onDeleteUser,
+  onSaveUser,
 } from '../actions/users.js';
 
 import {
@@ -33,6 +34,7 @@ function mapDispatchToProps(dispatch) {
         loadUser,
         loadUsers,
         onDeleteUser,
+        onSaveUser,
         onSetUser,
         onSetUserAttribute,
         onSetPaginationData,
