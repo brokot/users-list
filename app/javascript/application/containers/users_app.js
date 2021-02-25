@@ -17,9 +17,10 @@ import {
 
 function mapStateToProps(state) {
   return {
-    loading: state.users.loading,
-    saving: state.users.saving,
+    deleting: state.app.deleting,
+    loading: state.app.loading,
     paginationData: state.app.paginationData,
+    saving: state.app.saving,
     user: state.users.user,
     users: state.users.users,
   };

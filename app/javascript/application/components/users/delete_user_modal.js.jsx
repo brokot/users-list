@@ -10,7 +10,6 @@ class DeletingUserModal extends Component {
 
     this.state = {
       id: null,
-      loading: false,
     }
   }
 
@@ -23,9 +22,8 @@ class DeletingUserModal extends Component {
   }
 
   onConfirmDeleting() {
-    this.setState({ loading: true });
     this.props.onDelete(this.state.id, () => {
-      this.setState({ id: null, loading: false });
+      this.setState({ id: null });
     });
   }
 
@@ -34,11 +32,13 @@ class DeletingUserModal extends Component {
   }
   
   render() {
-    const { id, loading } = this.state;
+    const { id } = this.state;
+    const { loading } = this.props;
 
     return (
       <Modal
         open={id}
+        loading={loading}
         onClose={this.onCancelDeleting.bind(this)}
         title="Delete user"
         primaryAction={{

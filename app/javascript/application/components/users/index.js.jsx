@@ -101,7 +101,7 @@ class UsersList extends Component {
   }
 
   render() {
-    const { actions, loading, saving, user } = this.props;
+    const { actions, deleting, loading, saving, user } = this.props;
 
     return (
       <Page
@@ -126,6 +126,7 @@ class UsersList extends Component {
         </Card>
         <DeletingUserModal
           getOpenFn={(openFn) => { this.setUserOnDelete = openFn }}
+          loading={deleting}
           onDelete={this.onDeleteUser.bind(this)}
         />
         <UserFormModal

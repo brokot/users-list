@@ -1,24 +1,13 @@
 import axios from 'axios';
+import {
+  onSetDeleting,
+  onSetLoading,
+  onSetSaving
+} from './app.js';
 
-export const SET_LOADING = 'SET_LOADING';
-export const SET_SAVING = 'SET_SAVING';
 export const SET_USER = 'SET_USER';
 export const SET_USER_ATTRIBUTE = 'SET_USER_ATTRIBUTE';
 export const SET_USERS = 'SET_USERS';
-
-export function onSetLoading(loading) {
-  return {
-    type: SET_LOADING,
-    loading,
-  };
-}
-
-export function onSetSaving(saving) {
-  return {
-    type: SET_SAVING,
-    saving,
-  };
-}
 
 export function onSetUser(user) {
   return {
@@ -67,20 +56,23 @@ export function loadUsers(params, success) {
       dispatch(onSetLoading(false));
       success && success(data);
     }).catch((error) => {
-      console.log(error);
       dispatch(onSetLoading(false));
+      console.log(error);
     });
   }
 }
 
 export function onDeleteUser(id, success) {
   return (dispatch) => {
+    dispatch(onSetDeleting(true));
     axios.delete(
       `/users/${id}`,
       { headers: window.axiosDefaultHeaders }
     ).then((response) => {
+      dispatch(onSetDeleting(false));
       success && success(response);
     }).catch((error) => {
+      dispatch(onSetDeleting(false));
       console.log(error);
     });
   }
