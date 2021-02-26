@@ -5,6 +5,7 @@ import {
   Badge,
   Card,
   DataTable,
+  Filters,
   Frame,
   Page,
   Toast,
@@ -15,6 +16,14 @@ import Paginator from '../common/paginator.js.jsx';
 import UserFormModal from './user_form_modal.js.jsx';
 
 class UsersList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      query: '',
+    }
+  }
+
   componentDidMount() {
     this.loadUsers(this.indexParams());
   }
@@ -38,6 +47,18 @@ class UsersList extends Component {
     const sortString = `${column.sortableAttribute} ${direction.replace('ending','')}`;
     this.props.actions.onSetFilterData({ s: sortString });
     this.loadUsers({...this.indexParams(), q: {...filterData, s: sortString}});
+  }
+
+  onFilter() {
+    const { filterData } = this.props;
+    const { query } = this.state;
+    this.props.actions.onSetFilterData({ page: 1 });
+    this.props.actions.onSetFilterData({ name_or_email_cont: query });
+    this.loadUsers({
+      ...this.indexParams(),
+      page: 1,
+      q: {...filterData, name_or_email_cont: query}
+    });
   }
 
   onChangePage(page) {
@@ -136,7 +157,15 @@ class UsersList extends Component {
   }
 
   render() {
-    const { actions, deleting, loading, message, saving, user } = this.props;
+    const {
+      actions,
+      deleting,
+      loading,
+      message,
+      saving,
+      user
+    } = this.props;
+    const { query } = this.state;
 
     return (
       <Frame>
@@ -149,6 +178,16 @@ class UsersList extends Component {
         >
           <Card>
             <Card.Section>
+              <Filters
+                queryValue={query}
+                onQueryChange={(query) => this.setState({ query })}
+                onQueryClear={(query) => this.setState({ query: '' }, this.onFilter)}
+                filters={[]}
+              >
+                <Button onClick={this.onFilter.bind(this)}>
+                  Apply
+                </Button>
+              </Filters>
               <div style={{position: 'relative', minHeight: '80px'}}>
                 {loading && <IndexSpinner />}
                 <DataTable
