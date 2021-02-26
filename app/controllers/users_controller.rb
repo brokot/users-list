@@ -3,7 +3,11 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    @users = User.page(params[:page]).per(params[:limit])
+    @users =  User.ransack(params[:q])
+                .result(distinct: true)
+                .page(params[:page])
+                .per(params[:limit])
+
     render json: {
         users: @users,
         meta: pagination_meta(@users)
