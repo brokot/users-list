@@ -17,4 +17,10 @@ class ApplicationController < ActionController::Base
   end
   helper_method :pagination_data
 
+  def filter_data
+    data = params[:q] || {}
+    data[:s] ||= 'updated_at asc'
+    data
+  end
+  helper_method :filter_data
 end

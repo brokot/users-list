@@ -16,20 +16,33 @@ import UserFormModal from './user_form_modal.js.jsx';
 
 class UsersList extends Component {
   componentDidMount() {
-    this.loadUsers(this.paginationParams());
+    this.loadUsers(this.indexParams());
   }
 
   onDeleteUser(id, callback) {
     this.props.actions.onDeleteUser(id, () => {
       callback && callback();
-      this.loadUsers(this.paginationParams());
+      this.loadUsers(this.indexParams());
     });
   }
 
   onSaveUser() {
     this.props.actions.onSaveUser(this.userParams(), () => {
-      this.loadUsers(this.paginationParams());
+      this.loadUsers(this.indexParams());
     });
+  }
+
+  onSort(index, direction) {
+    const { filterData } = this.props;
+    const column = this.columns()[index];
+    const sortString = `${column.sortableAttribute} ${direction.replace('ending','')}`;
+    this.props.actions.onSetFilterData({ s: sortString });
+    this.loadUsers({...this.indexParams(), q: {...filterData, s: sortString}});
+  }
+
+  onChangePage(page) {
+    this.props.actions.onSetPaginationData({ page });
+    this.loadUsers({...this.indexParams(), page });
   }
 
   loadUsers(params) {
@@ -51,16 +64,16 @@ class UsersList extends Component {
     })
   }
 
-  headers() {
-    return(
-      ['Last updated', 'Name', 'Email', 'Title', 'Phone', 'Status', '']
-    );
-  }
-
-  contentType() {
-    return(
-      ['Text', 'Text', 'Text', 'Text', 'Text', 'Text', 'Text']
-    );
+  columns() {
+    return ([
+      { header: 'Last updated', contentType: 'Text', sortable: true, sortableAttribute: 'updated_at' },
+      { header: 'Name', contentType: 'Text', sortable: true, sortableAttribute: 'name' },
+      { header: 'Email', contentType: 'Text', sortable: true, sortableAttribute: 'email' },
+      { header: 'Title', contentType: 'Text', sortable: true, sortableAttribute: 'title' },
+      { header: 'Phone', contentType: 'Text', sortable: true, sortableAttribute: 'phone' },
+      { header: 'status', contentType: 'Text', sortable: true, sortableAttribute: 'status' },
+      { header: '', contentType: 'Text', sortable: false }
+    ]);
   }
 
   rows() {
@@ -85,7 +98,7 @@ class UsersList extends Component {
       <Paginator
         totalPages={paginationData.total_pages}
         page={paginationData.page}
-        changePage={this.changePage.bind(this)}
+        changePage={this.onChangePage.bind(this)}
       />
     );
   }
@@ -112,17 +125,13 @@ class UsersList extends Component {
     return date.toUTCString();
   }
 
-  changePage(page) {
-    this.props.actions.onSetPaginationData({ page });
-    this.loadUsers({...this.paginationParams(), page });
-  }
-
-  paginationParams() {
-    const { paginationData } = this.props;
+  indexParams() {
+    const { filterData, paginationData } = this.props;
 
     return {
       page: paginationData.page,
       limit: paginationData.limit,
+      q: filterData,
     }
   }
 
@@ -143,10 +152,12 @@ class UsersList extends Component {
               <div style={{position: 'relative', minHeight: '80px'}}>
                 {loading && <IndexSpinner />}
                 <DataTable
-                  columnContentTypes={this.contentType()}
-                  headings={this.headers()}
-                  rows={this.rows()}
+                  columnContentTypes={this.columns().map((column) => column.contentType)}
                   footerContent={this.buildFooter()}
+                  headings={this.columns().map((column) => column.header)}
+                  rows={this.rows()}
+                  sortable={this.columns().map((column) => column.sortable)}
+                  onSort={this.onSort.bind(this)}
                 />
               </div>
             </Card.Section>

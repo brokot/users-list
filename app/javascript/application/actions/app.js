@@ -1,4 +1,5 @@
 export const SET_DELETING = 'SET_DELETING';
+export const SET_FILTER_DATA = 'SET_FILTER_DATA';
 export const SET_LOADING = 'SET_LOADING';
 export const SET_MESSAGE = 'SET_MESSAGE';
 export const SET_PAGINATION_DATA = 'SET_PAGINATION_DATA';
@@ -8,6 +9,13 @@ export function onSetDeleting(deleting) {
   return {
     type: SET_DELETING,
     deleting,
+  };
+}
+
+export function onSetFilterData(data) {
+  return {
+    type: SET_FILTER_DATA,
+    data,
   };
 }
 

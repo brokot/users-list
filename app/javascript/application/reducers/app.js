@@ -1,6 +1,7 @@
 import immutableUpdate from 'react-addons-update';
 import {
   SET_DELETING,
+  SET_FILTER_DATA,
   SET_LOADING,
   SET_MESSAGE,
   SET_PAGINATION_DATA,
@@ -9,6 +10,7 @@ import {
 
 const initialState = {
   deleting: false,
+  filterData: {},
   loading: false,
   message: {},
   paginationData: {},
@@ -20,6 +22,10 @@ export default function app(state = initialState, action) {
     case SET_DELETING:
       return immutableUpdate(state, {
         deleting: {$set: action.deleting}
+      });
+    case SET_FILTER_DATA:
+      return immutableUpdate(state, {
+        filterData: {$set: {...state.filterData, ...action.data}}
       });
     case SET_LOADING:
       return immutableUpdate(state, {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 import {
   onSetDeleting,
   onSetLoading,
@@ -51,7 +52,7 @@ export function loadUser(id) {
 export function loadUsers(params, success) {
   return (dispatch) => {
     dispatch(onSetLoading(true));
-    axios.get('/users', { params }).then((response) => {
+    axios.get(`/users?${qs.stringify(params)}`).then((response) => {
       const { data } = response;
       dispatch(onSetUsers(data.users));
       dispatch(onSetLoading(false));

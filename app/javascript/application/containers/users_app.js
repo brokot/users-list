@@ -13,6 +13,7 @@ import {
 } from '../actions/users.js';
 
 import {
+  onSetFilterData,
   onSetMessage,
   onSetPaginationData,
 } from '../actions/app.js';
@@ -20,6 +21,7 @@ import {
 function mapStateToProps(state) {
   return {
     deleting: state.app.deleting,
+    filterData: state.app.filterData,
     loading: state.app.loading,
     message: state.app.message,
     paginationData: state.app.paginationData,
@@ -37,6 +39,7 @@ function mapDispatchToProps(dispatch) {
         loadUsers,
         onDeleteUser,
         onSaveUser,
+        onSetFilterData,
         onSetMessage,
         onSetUser,
         onSetUserAttribute,

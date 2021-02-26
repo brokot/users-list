@@ -5,6 +5,7 @@ import UsersApp from './users_app.js';
 import PolarisWrapper from '../../application/components/common/polaris_wrapper.js.jsx';
 import {
   onSetPaginationData,
+  onSetFilterData,
 } from '../actions/app.js';
 
 class UsersContainer extends Component {
@@ -12,6 +13,7 @@ class UsersContainer extends Component {
     super(props);
     this.store = typeof window.store === 'undefined' ? configureStore() : window.store;
     this.store.dispatch(onSetPaginationData(props.paginationData));
+    this.store.dispatch(onSetFilterData(props.filterData));
   }
 
   render() {
