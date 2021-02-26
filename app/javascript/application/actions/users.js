@@ -52,6 +52,7 @@ export function loadUser(id) {
 export function loadUsers(params, success) {
   return (dispatch) => {
     dispatch(onSetLoading(true));
+    updateState(params);
     axios.get(`/users?${qs.stringify(params)}`).then((response) => {
       const { data } = response;
       dispatch(onSetUsers(data.users));
@@ -99,5 +100,12 @@ export function onSaveUser(user, success) {
       if (error.response) dispatch(onSetUserAttribute('errors', error.response.data));
       dispatch(onSetMessage("User can't be saved", true));
     });
+  }
+}
+
+function updateState(params) {
+  const url = [location.protocol, '//', location.host, location.pathname, '?', qs.stringify(params)].join('');
+  if (url != location.href) {
+    history.pushState(params, '', url);
   }
 }
