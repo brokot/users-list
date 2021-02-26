@@ -53,7 +53,7 @@ class UsersList extends Component {
 
   headers() {
     return(
-      ['Name', 'Email', 'Title', 'Phone', 'Status', 'Last updated', '']
+      ['Last updated', 'Name', 'Email', 'Title', 'Phone', 'Status', '']
     );
   }
 
@@ -67,12 +67,12 @@ class UsersList extends Component {
     const { users } = this.props;
     return users.map((user) => {
       return [
+        this.lastUpdated(user.updated_at),
         user.name,
         user.email,
         user.title,
         user.phone,
         this.userStatus(user.status),
-        user.updated_at,
         this.userActions(user),
       ];
     });
@@ -105,6 +105,11 @@ class UsersList extends Component {
     return(
       <Badge status={status === 'inactive' ? 'critical' : 'success'}>{status}</Badge>
     );
+  }
+
+  lastUpdated(updatedAt) {
+    const date = new Date(updatedAt);
+    return date.toUTCString();
   }
 
   changePage(page) {
