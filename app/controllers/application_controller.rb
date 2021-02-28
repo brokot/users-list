@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
 
   def filter_data
     data = params[:q] || {}
-    data[:s] ||= 'updated_at asc'
+    data[:s] ||= 'updated_at desc'
     data
   end
   helper_method :filter_data
